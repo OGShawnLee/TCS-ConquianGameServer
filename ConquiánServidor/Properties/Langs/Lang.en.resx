@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ErrorInvalidCredentials" xml:space="preserve">
+    <value>Invalid credentials</value>
+  </data>
+  <data name="ErrorNicknameExists" xml:space="preserve">
+    <value>This nickname already exists.</value>
+  </data>
+  <data name="ErrorUserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="ErrorVerificationCodeIncorrect" xml:space="preserve">
+    <value>Incorrect verification code</value>
+  </data>
+  <data name="GlobalDbEntityValidationError" xml:space="preserve">
+    <value>Entity validation error (DbEntityValidationException): {0}</value>
+  </data>
+  <data name="GlobalDbUpdateError" xml:space="preserve">
+    <value>Error saving to DB (DbUpdateException): {0}</value>
+  </data>
+  <data name="GlobalSmtpError" xml:space="preserve">
+    <value>Error sending email, please try again later</value>
+  </data>
+  <data name="GlobalSqlError" xml:space="preserve">
+    <value>Error connecting to the database</value>
+  </data>
+  <data name="GuestEmailSubject" xml:space="preserve">
+    <value>You are invited to a game of Conquián!</value>
+  </data>
+  <data name="LogAuthLogicAuthAttempt" xml:space="preserve">
+    <value>Authentication attempt for: {0}</value>
+  </data>
+  <data name="LogAuthLogicAuthFailed" xml:space="preserve">
+    <value>Authentication failed for: {0} (User not found or incorrect password)</value>
+  </data>
+  <data name="LogAuthLogicAuthSuccess" xml:space="preserve">
+    <value>Player authenticated successfully: {0} (ID: {1})</value>
+  </data>
+  <data name="LogAuthLogicDeleteTempDbUpdateError" xml:space="preserve">
+    <value>Error deleting temporary player (DbUpdateException): {0}</value>
+  </data>
+  <data name="LogAuthLogicDeleteTempNotFound" xml:space="preserve">
+    <value>Temporary player {0} not deleted (not found or already registered).</value>
+  </data>
+  <data name="LogAuthLogicDeleteTempSqlError" xml:space="preserve">
+    <value>SQL error deleting temporary player (SqlException): {0}</value>
+  </data>
+  <data name="LogAuthLogicDeleteTempSuccess" xml:space="preserve">
+    <value>Temporary player deleted: {0}</value>
+  </data>
+  <data name="LogAuthLogicDeleteTempUnexpectedError" xml:space="preserve">
+    <value>Unexpected error in DeleteTemporaryPlayerAsync: {0}</value>
+  </data>
+  <data name="LogAuthLogicGenTokenDbUpdateError" xml:space="preserve">
+    <value>Error updating token in DB (DbUpdateException): {0}</value>
+  </data>
+  <data name="LogAuthLogicGenTokenNotFound" xml:space="preserve">
+    <value>Token not generated for {0}: Player not found or has no password.</value>
+  </data>
+  <data name="LogAuthLogicGenTokenSqlError" xml:space="preserve">
+    <value>SQL error in GenerateAndStoreRecoveryTokenAsync (SqlException): {0}</value>
+  </data>
+  <data name="LogAuthLogicGenTokenSuccess" xml:space="preserve">
+    <value>Recovery token generated for: {0}</value>
+  </data>
+  <data name="LogAuthLogicGenTokenUnexpectedError" xml:space="preserve">
+    <value>Unexpected error in GenerateAndStoreRecoveryTokenAsync: {0}</value>
+  </data>
+  <data name="LogAuthLogicPassRecoverySmtpError" xml:space="preserve">
+    <value>Error sending recovery email (SmtpException): {0}</value>
+  </data>
+  <data name="LogAuthLogicPassRecoverySuccess" xml:space="preserve">
+    <value>Recovery email sent to: {0}</value>
+  </data>
+  <data name="LogAuthLogicPassRecoveryTokenFailed" xml:space="preserve">
+    <value>Password recovery request failed for {0}: Token could not be generated.</value>
+  </data>
+  <data name="LogAuthLogicPassRecoveryUnexpectedError" xml:space="preserve">
+    <value>Unexpected error in recovery request: {0}</value>
+  </data>
+  <data name="LogAuthLogicPassResetDbUpdateError" xml:space="preserve">
+    <value>Error resetting password in DB (DbUpdateException): {0}</value>
+  </data>
+  <data name="LogAuthLogicPassResetInvalidPassword" xml:space="preserve">
+    <value>Password reset failed for {0}: Invalid password.</value>
+  </data>
+  <data name="LogAuthLogicPassResetPlayerNotFound" xml:space="preserve">
+    <value>Password reset failed for {0}: Player not found (post-validation).</value>
+  </data>
+  <data name="LogAuthLogicPassResetSqlError" xml:space="preserve">
+    <value>SQL error when resetting password (SqlException): {0}</value>
+  </data>
+  <data name="LogAuthLogicPassResetSuccess" xml:space="preserve">
+    <value>Password reset successfully for: {0}</value>
+  </data>
+  <data name="LogAuthLogicPassResetTokenFailed" xml:space="preserve">
+    <value>Password reset failed for {0}: Invalid or expired token.</value>
+  </data>
+  <data name="LogAuthLogicPassResetUnexpectedError" xml:space="preserve">
+    <value>Unexpected error when resetting password: {0}</value>
+  </data>
+  <data name="LogAuthLogicRegisterNicknameExists" xml:space="preserve">
+    <value>Registration attempt failed for {0}: Nickname {1} already exists.</value>
+  </data>
+  <data name="LogAuthLogicRegisterPlayerUnexpectedError" xml:space="preserve">
+    <value>Unexpected error in RegisterPlayerAsync: {0}</value>
+  </data>
+  <data name="LogAuthLogicRegisterSuccess" xml:space="preserve">
+    <value>Player registered successfully: {0} (Email: {1})</value>
+  </data>
+  <data name="LogAuthLogicRegisterValidationFailed" xml:space="preserve">
+    <value>Registration validation failed for {0}: {1}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeDbUpdateError" xml:space="preserve">
+    <value>Error saving code to DB (DbUpdateException): {0}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeEfValidationError" xml:space="preserve">
+    <value>Entity validation error in SendVerificationCodeAsync (DbEntityValidationException): {0}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeEmailExists" xml:space="preserve">
+    <value>Attempt to send verification code failed: Email {0} already exists.</value>
+  </data>
+  <data name="LogAuthLogicSendCodeInvalidEmail" xml:space="preserve">
+    <value>Attempt to send verification code failed: Invalid email {0}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeSqlError" xml:space="preserve">
+    <value>SQL error in SendVerificationCodeAsync (SqlException): {0}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeSuccess" xml:space="preserve">
+    <value>Verification code sent to: {0}</value>
+  </data>
+  <data name="LogAuthLogicSendCodeUnexpectedError" xml:space="preserve">
+    <value>Unexpected error in SendVerificationCodeAsync: {0}</value>
+  </data>
+  <data name="LogAuthLogicSignOutAttempt" xml:space="preserve">
+    <value>Sign-out attempt for ID: {0}</value>
+  </data>
+  <data name="LogAuthLogicSignOutSuccess" xml:space="preserve">
+    <value>Player {0} signed out successfully.</value>
+  </data>
+  <data name="LogAuthLogicVerifyCodeSqlError" xml:space="preserve">
+    <value>SQL error while verifying code (SqlException): {0}</value>
+  </data>
+  <data name="LogAuthLogicVerifyCodeSuccess" xml:space="preserve">
+    <value>Code verified successfully for: {0}</value>
+  </data>
+  <data name="LogAuthLogicVerifyCodeUnexpectedError" xml:space="preserve">
+    <value>Unexpected error while verifying code: {0}</value>
+  </data>
+  <data name="LogGameActionFailed" xml:space="preserve">
+    <value>Failed action in game {0} by player {1}: {2}.</value>
+  </data>
+  <data name="LogGameDrawDeckSuccess" xml:space="preserve">
+    <value>Player {0} drew a card from the deck in room {1}</value>
+  </data>
+  <data name="LogGameJoinSuccess" xml:space="preserve">
+    <value>Player {0} joined the room {1}.</value>
+  </data>
+  <data name="LogGamePlayCardSuccess" xml:space="preserve">
+    <value>Player {0} played cards in room {1}.</value>
+  </data>
+  <data name="LogAuthLogicVerifyCodeFailed" xml:space="preserve">
+    <value>Code verification failed for: {0} (incorrect code or expired)</value>
+  </data>
+  <data name="ErrorGameNotFound" xml:space="preserve">
+    <value>The requested match does not exist or has ended.</value>
+  </data>
+  <data name="ErrorGameInvalidMove" xml:space="preserve">
+    <value>The attempted move is not valid.</value>
+  </data>
+  <data name="ErrorGameNotYourTurn" xml:space="preserve">
+    <value>It's not your turn to perform this action.</value>
+  </data>
+  <data name="ErrorGameAction" xml:space="preserve">
+    <value>An error occurred while processing the game action.</value>
+  </data>
+  <data name="LogGameCallbackError" xml:space="preserve">
+    <value>Error sending notification to player {0}. They will be removed from the session.</value>
+  </data>
+  <data name="LogGameBroadcastError" xml:space="preserve">
+    <value>Error broadcasting the update to all players.</value>
+  </data>
+  <data name="LogLobbyCreated" xml:space="preserve">
+    <value>Lobby {0} created by host {1}.</value>
+  </data>
+  <data name="LogLobbyJoined" xml:space="preserve">
+    <value>Player {0} joined lobby {1}</value>
+  </data>
+  <data name="LogLobbyLeft" xml:space="preserve">
+    <value>Player {0} left the lobby {1}</value>
+  </data>
+  <data name="LogLobbyGameStarted" xml:space="preserve">
+    <value>Game started in lobby {0}.</value>
+  </data>
+  <data name="LogLobbyGamemodeChanged" xml:space="preserve">
+    <value>Game mode updated in lobby {0} to {1}.</value>
+  </data>
+  <data name="ErrorLobbyNotFound" xml:space="preserve">
+    <value>The room does not exist or has already closed</value>
+  </data>
+  <data name="ErrorLobbyFull" xml:space="preserve">
+    <value>The room is full or in play.</value>
+  </data>
+  <data name="ErrorLobbyHostNotFound" xml:space="preserve">
+    <value>The host user cannot be found.</value>
+  </data>
+  <data name="ErrorLobbyNotEnoughPlayers" xml:space="preserve">
+    <value>There aren't enough players to start.</value>
+  </data>
+  <data name="ErrorLobbyNoGamemode" xml:space="preserve">
+    <value>You must select a game mode before starting.</value>
+  </data>
+  <data name="ErrorLobbyAction" xml:space="preserve">
+    <value>Error performing the operation in the lobby-</value>
+  </data>
+  <data name="ErrorInvalidInvitation" xml:space="preserve">
+    <value>Does not have an invitation.</value>
+  </data>
+  <data name="ErrorUsedInvitation" xml:space="preserve">
+    <value>This invitation has already been used.</value>
+  </data>
+  <data name="ErrorRegisteredMail" xml:space="preserve">
+    <value>This email is already registered, please log in.</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Internal server error.</value>
+  </data>
+  <data name="LogInvitationSubscribed" xml:space="preserve">
+    <value>Player {0} subscribed to invitation notifications</value>
+  </data>
+  <data name="LogInvitationUnsubscribed" xml:space="preserve">
+    <value>Player {0} unsubscribed from notifications.</value>
+  </data>
+  <data name="LogInvitationSent" xml:space="preserve">
+    <value>Invitation sent from {0} to {1} for room {2}.</value>
+  </data>
+  <data name="LogInvitationDeliveryFailed" xml:space="preserve">
+    <value>Failed to deliver invitation to player {0}</value>
+  </data>
+  <data name="ErrorPlayerOffline" xml:space="preserve">
+    <value>The player is disconnected.</value>
+  </data>
+  <data name="ErrorInvitationFailed" xml:space="preserve">
+    <value>An error occurred while trying to send the invitation</value>
+  </data>
+  <data name="LogGuestInviteSent" xml:space="preserve">
+    <value>Guest invitation sent to {0} for room {1}.</value>
+  </data>
+  <data name="ErrorGuestInviteEmailFailed" xml:space="preserve">
+    <value>The email could not be sent to {0}.</value>
+  </data>
+  <data name="ErrorPresenceAction" xml:space="preserve">
+    <value>Presence service error.</value>
+  </data>
+  <data name="LogPresenceConnected" xml:space="preserve">
+    <value>Player {0} connected to the Presence service.</value>
+  </data>
+  <data name="LogPresenceDisconnected" xml:space="preserve">
+    <value>Player {0} disconnected from the presence service.</value>
+  </data>
+  <data name="LogPresenceCallbackFailed" xml:space="preserve">
+    <value>Failed to notify a subscriber of status.</value>
+  </data>
+  <data name="ErrorNotLobbyHost" xml:space="preserve">
+    <value>You cannot kick someone because you are not the host.</value>
+  </data>
+  <data name="ErrorYouAreKicked" xml:space="preserve">
+    <value>You cannot join this lobby because you were kicked out.</value>
+  </data>
+  <data name="ErrorSessionActive" xml:space="preserve">
+    <value>You already have an active session. Please log out of the active session in order to open a new one.</value>
+  </data>
+</root>

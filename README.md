@@ -1,6 +1,6 @@
-# Cliente Conaquian #
+# Servidor Conaquian #
 
-Este repositorio contiene el servidor para el videojuego Conaquian actualizado a .NET Core 8
+Este repositorio contiene el servidor para el videojuego Conquían actualizado a .NET Core 8.
 
 ## Requisitos ##
 

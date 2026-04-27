@@ -1,4 +1,4 @@
-﻿using ConquiánServidor.BusinessLogic.Exceptions;
+using ConquiánServidor.BusinessLogic.Exceptions;
 using ConquiánServidor.BusinessLogic.Validation;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.ServiceContracts;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace ConquiánServidor.BusinessLogic.Game
 {
@@ -226,7 +226,7 @@ namespace ConquiánServidor.BusinessLogic.Game
             gameTimer.Start();
         }
 
-        private void OnTimerTick(object sender, ElapsedEventArgs e)
+        private void OnTimerTick(object sender, System.Timers.ElapsedEventArgs e)
         {
             remainingSeconds--;
             bool timeExpired = remainingSeconds <= MINIMUM_DURATION;

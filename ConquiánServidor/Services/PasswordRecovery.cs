@@ -7,6 +7,7 @@ using ConquiánServidor.Utilities.ExceptionHandler;
 using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using CoreWCF;
 
 namespace ConquiánServidor.Services
 {

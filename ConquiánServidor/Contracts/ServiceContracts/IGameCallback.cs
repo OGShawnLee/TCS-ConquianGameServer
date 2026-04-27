@@ -1,5 +1,7 @@
 ﻿using ConquiánServidor.Contracts.DataContracts;
 using System.ServiceModel;
+using CoreWCF;
+
 namespace ConquiánServidor.Contracts.ServiceContracts
 {
     [ServiceContract]

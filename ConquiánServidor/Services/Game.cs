@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using CoreWCF;
 
 namespace ConquiánServidor.Services
 {

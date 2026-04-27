@@ -2,6 +2,7 @@
 using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.Contracts.ServiceContracts;
 using System.ServiceModel;
+using CoreWCF;
 
 namespace ConquiánServidor.Services
 {

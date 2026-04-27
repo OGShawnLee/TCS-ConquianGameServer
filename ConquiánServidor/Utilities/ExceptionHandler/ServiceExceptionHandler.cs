@@ -7,6 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Net.Mail;
 using System.ServiceModel;
+using CoreWCF;
 
 namespace ConquiánServidor.Utilities.ExceptionHandler
 {

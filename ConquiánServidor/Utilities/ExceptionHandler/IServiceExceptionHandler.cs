@@ -1,6 +1,7 @@
 ﻿using ConquiánServidor.Contracts.DataContracts;
 using System;
 using System.ServiceModel;
+using CoreWCF;
 
 namespace ConquiánServidor.Utilities.ExceptionHandler
 {

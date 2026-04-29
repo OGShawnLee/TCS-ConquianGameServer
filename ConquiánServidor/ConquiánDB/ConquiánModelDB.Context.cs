@@ -15,7 +15,7 @@ namespace ConquiánServidor.ConquiánDB
     
     public partial class ConquiánDBEntities : DbContext
     {
-        public ConquiánDBEntities()
+        public ConquiánDBEntities(string nameOrConnectionString)
             : base(GetConnectionString())
         {
         }

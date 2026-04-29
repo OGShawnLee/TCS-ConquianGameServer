@@ -34,7 +34,9 @@ namespace ConquiánServidor
                 {
                     var builder = new ContainerBuilder();
 
-                    builder.RegisterType<ConquiánDBEntities>().AsSelf().InstancePerDependency();
+                    string dbConnection = Environment.GetEnvironmentVariable("CONQUIAN_DB_CONNECTION") ?? "default";
+
+                    builder.RegisterType<ConquiánDBEntities>().WithParameter("nameOrConnectionString", dbConnection).AsSelf().InstancePerDependency();
                     builder.RegisterType<PlayerRepository>().As<IPlayerRepository>();
                     builder.RegisterType<LobbyRepository>().As<ILobbyRepository>();
                     builder.RegisterType<SocialRepository>().As<ISocialRepository>();

@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ServiceModel;
+﻿using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Services;
+using CoreWCF;
+using CoreWCF.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using NLog;
 
 namespace ConquiánServidor
@@ -9,7 +11,6 @@ namespace ConquiánServidor
     public class Program
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-        private static readonly List<ServiceHost> serviceHosts = new List<ServiceHost>();
 
         public static void Main(string[] args)
         {
@@ -20,12 +21,24 @@ namespace ConquiánServidor
                 logger.Info("Starting Conquián Server...");
                 PrintBanner();
 
-                StartAllServices();
+                WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+                builder.Services.AddServiceModelServices();
+                builder.Services.AddServiceModelMetadata();
+
+                builder.WebHost.ConfigureKestrel(options =>
+                {
+                    options.ListenAnyIP(8080);
+                });
+                builder.WebHost.UseNetTcp(8081);
+                
+                WebApplication app = RegisterServices(builder);
 
                 Console.WriteLine();
                 Console.WriteLine("Todos los servicios están activos.");
                 Console.WriteLine("Presiona ENTER para detener el servidor...");
-                Console.ReadLine();
+                
+                app.Run();
             }
             catch (Exception ex)
             {
@@ -37,7 +50,8 @@ namespace ConquiánServidor
             }
             finally
             {
-                StopAllServices();
+                logger.Info("Servidor detenido correctamente.");
+                Console.WriteLine("Servidor apagado.");
             }
         }
 
@@ -48,75 +62,65 @@ namespace ConquiánServidor
             Console.WriteLine();
         }
 
-        private static void StartAllServices()
+        private static WebApplication RegisterServices(WebApplicationBuilder builder)
         {
-            StartService<SignUp>("SignUp");
-            StartService<Login>("Login");
-            StartService<UserProfile>("UserProfile");
-            StartService<FriendList>("FriendList");
-            StartService<Invitation>("Invitation");
-            StartService<PasswordRecovery>("PasswordRecovery");
-            StartService<Presence>("Presence");
-            StartService<GuestInvitation>("GuestInvitation");
-            StartService<Lobby>("Lobby");
-            StartService<Game>("Game");
-        }
-
-        private static void StartService<T>(string serviceName) where T : class
-        {
+            WebApplication app = builder.Build();
+            
             try
             {
-                var host = new ServiceHost(typeof(T));
-                host.Open();
-
-                serviceHosts.Add(host);
-
-                foreach (var endpoint in host.Description.Endpoints)
+                ((IApplicationBuilder)app).UseServiceModel(builder =>
                 {
-                    logger.Info($"{serviceName} escuchando en {endpoint.Address}");
-                }
+                    builder.AddService<SignUp>();
+                    builder.AddServiceEndpoint<SignUp>(typeof(ISignUp), new BasicHttpBinding(), "/signUp");
+
+                    builder.AddService<Login>();
+                    builder.AddServiceEndpoint<Login>(typeof(ILogin), new BasicHttpBinding(), "/login");
+                    
+                    builder.AddService<UserProfile>();
+                    builder.AddServiceEndpoint<UserProfile>(typeof(IUserProfile), new BasicHttpBinding(), "/userprofile");
+                    
+                    builder.AddService<FriendList>();
+                    builder.AddServiceEndpoint<FriendList>(typeof(IFriendList), new BasicHttpBinding(), "/friendlist");
+                    
+                    builder.AddService<Invitation>();
+                    builder.AddServiceEndpoint<Invitation>(typeof(IInvitationService), new NetTcpBinding(), "/invitation");
+                    
+                    builder.AddService<PasswordRecovery>();
+                    builder.AddServiceEndpoint<PasswordRecovery>(typeof(IPasswordRecovery), new BasicHttpBinding(), "/password-recovery");
+                    
+                    builder.AddService<Presence>();
+                    builder.AddServiceEndpoint<Presence>(typeof(IPresence), new NetTcpBinding(), "/presence");
+                    
+                    builder.AddService<GuestInvitation>();
+                    builder.AddServiceEndpoint<GuestInvitation>(typeof(IGuestInvitation), new BasicHttpBinding(), "/guest");
+                    
+                    builder.AddService<Lobby>();
+                    builder.AddServiceEndpoint<Lobby>(typeof(ILobby), new NetTcpBinding(), "/lobby");
+                    
+                    builder.AddService<Game>();
+                    builder.AddServiceEndpoint<Game>(typeof(IGame), new NetTcpBinding(), "/game");
+                });
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"[OK] Servicio {serviceName} iniciado.");
+                Console.WriteLine($"[OK] Todos los servicios registrados.");
                 Console.ResetColor();
+
+                return app;
             }
-            catch (AddressAlreadyInUseException)
+            catch (AddressAlreadyInUseException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[FAIL] {serviceName} - Puerto en uso.");
+                Console.WriteLine($"[FAIL] - Puerto en uso: {ex.Message}");
                 Console.ResetColor();
                 throw;
             }
             catch (CommunicationException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[FAIL] {serviceName} - Error de comunicación: {ex.Message}");
+                Console.WriteLine($"[FAIL] - Error de comunicación: {ex.Message}");
                 Console.ResetColor();
                 throw;
             }
-        }
-
-        private static void StopAllServices()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Deteniendo servicios...");
-
-            foreach (var host in serviceHosts)
-            {
-                try
-                {
-                    if (host.State == CommunicationState.Opened)
-                        host.Close();
-                }
-                catch
-                {
-                    host.Abort();
-                }
-            }
-
-            serviceHosts.Clear();
-            logger.Info("Servidor detenido correctamente.");
-            Console.WriteLine("Servidor apagado.");
         }
     }
 }

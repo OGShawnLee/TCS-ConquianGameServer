@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "ConquiánServidorLS": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONQUIAN_DB_CONNECTION": "[Coloque aqui el connection string]"
+      }
+    }
+  }
+}

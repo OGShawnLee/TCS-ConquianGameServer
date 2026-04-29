@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ConquiánServidor.BusinessLogic.Exceptions
 {
     public class RegisteredUserAsGuestException : Exception

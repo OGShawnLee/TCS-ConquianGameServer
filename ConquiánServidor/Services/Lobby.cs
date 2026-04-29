@@ -5,13 +5,9 @@ using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Utilities;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
-using System.ServiceModel;
-using System.Threading.Tasks;
 using CoreWCF;
 
 namespace ConquiánServidor.Services

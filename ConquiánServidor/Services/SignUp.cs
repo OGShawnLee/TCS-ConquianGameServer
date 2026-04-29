@@ -4,8 +4,6 @@ using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Utilities.ExceptionHandler;
 using NLog;
-using System;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.Services
 {

@@ -1,10 +1,8 @@
 ﻿using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
-using System;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.ServiceModel;
+using CoreWCF;
 
 namespace ConquiánServidor.BusinessLogic.Lobby
 {

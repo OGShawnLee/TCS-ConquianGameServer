@@ -1,5 +1,4 @@
-﻿using System.Data.Entity.Core.Metadata.Edm;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ConquiánServidor.Contracts.DataContracts
 {

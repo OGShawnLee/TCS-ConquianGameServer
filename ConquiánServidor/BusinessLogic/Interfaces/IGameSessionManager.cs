@@ -1,6 +1,5 @@
 ﻿using ConquiánServidor.BusinessLogic.Game;
 using ConquiánServidor.Contracts.DataContracts;
-using System.Collections.Generic;
 
 namespace ConquiánServidor.BusinessLogic.Interfaces
 {

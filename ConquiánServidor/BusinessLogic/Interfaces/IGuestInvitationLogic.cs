@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-
+﻿
 namespace ConquiánServidor.BusinessLogic.Interfaces
 {
     public interface IGuestInvitationLogic

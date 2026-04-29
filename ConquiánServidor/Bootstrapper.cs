@@ -11,7 +11,6 @@ using ConquiánServidor.ConquiánDB.Repositories;
 using ConquiánServidor.Utilities.Email;
 using ConquiánServidor.Utilities.ExceptionHandler;
 using NLog;
-using System;
 using ConquiánServidor.BusinessLogic.Frienship;
 
 namespace ConquiánServidor

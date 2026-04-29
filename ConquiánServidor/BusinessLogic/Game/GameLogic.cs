@@ -2,12 +2,9 @@ using ConquiánServidor.BusinessLogic.Exceptions;
 using ConquiánServidor.BusinessLogic.Validation;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.ServiceContracts;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
+using CoreWCF;
 using Timer = System.Timers.Timer;
 
 namespace ConquiánServidor.BusinessLogic.Game
@@ -279,7 +276,7 @@ namespace ConquiánServidor.BusinessLogic.Game
                     {
                         cb.OnTimeUpdated(gameSeconds, turnSeconds, currentPlayerId);
                     }
-                    catch (System.ServiceModel.CommunicationException ex)
+                    catch (CommunicationException ex)
                     {
                         Logger.Info(ex, $"Error de comunicación con jugador {pid}. Finalizando partida.");
                         Task.Run(() => ProcessAFK(pid));
@@ -799,7 +796,7 @@ namespace ConquiánServidor.BusinessLogic.Game
                 {
                     action(callback);
                 }
-                catch (System.ServiceModel.CommunicationException ex)
+                catch (CommunicationException ex)
                 {
                     Logger.Warn(ex, $"Error de comunicación al notificar oponente ID {playerId}.");
                     Task.Run(() => ProcessAFK(playerId));
@@ -834,7 +831,7 @@ namespace ConquiánServidor.BusinessLogic.Game
                     {
                         action(kvp.Value);
                     }
-                    catch (System.ServiceModel.CommunicationException ex)
+                    catch (CommunicationException ex)
                     {
                         Logger.Warn(ex, $"Error de comunicación en broadcast para jugador {pid}.");
                         Task.Run(() => ProcessAFK(pid));
@@ -879,7 +876,7 @@ namespace ConquiánServidor.BusinessLogic.Game
                 {
                     callback.OnOpponentLeft();
                 }
-                catch (System.ServiceModel.CommunicationException ex)
+                catch (CommunicationException ex)
                 {
                     Logger.Error(ex, $"Error de comunicación al notificar salida en Room {RoomCode}");
                 }
@@ -1155,7 +1152,7 @@ namespace ConquiánServidor.BusinessLogic.Game
                 {
                     notifyAction();
                 }
-                catch (System.ServiceModel.CommunicationException ex)
+                catch (CommunicationException ex)
                 {
                     Logger.Error(ex, $"{errorContext} - Error de comunicación.");
                 }

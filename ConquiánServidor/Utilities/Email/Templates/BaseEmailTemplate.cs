@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConquiánServidor.Utilities.Email.Templates
+﻿namespace ConquiánServidor.Utilities.Email.Templates
 {
     public abstract class BaseEmailTemplate : IEmailTemplate
     {

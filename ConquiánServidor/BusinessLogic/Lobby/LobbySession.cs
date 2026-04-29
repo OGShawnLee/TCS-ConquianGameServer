@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ConquiánServidor.Contracts.DataContracts;
+﻿using ConquiánServidor.Contracts.DataContracts;
 
 namespace ConquiánServidor.BusinessLogic.Lobby
 {

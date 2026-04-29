@@ -7,12 +7,7 @@ using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Properties.Langs;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.ServiceModel;
-using System.Threading.Tasks;
 using CoreWCF;
 
 namespace ConquiánServidor.Services

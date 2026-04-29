@@ -3,10 +3,8 @@ using ConquiánServidor.BusinessLogic.Game;
 using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.Contracts.DataContracts;
 using NLog;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ServiceModel;
+using CoreWCF;
 
 namespace ConquiánServidor.BusinessLogic.Guest
 {

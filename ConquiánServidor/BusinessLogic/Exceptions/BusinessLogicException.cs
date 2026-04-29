@@ -1,5 +1,4 @@
 ﻿using ConquiánServidor.Contracts.DataContracts;
-using System;
 
 namespace ConquiánServidor.BusinessLogic.Exceptions
 {

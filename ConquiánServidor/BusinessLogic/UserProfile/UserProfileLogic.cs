@@ -5,10 +5,6 @@ using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.ConquiánDB.Abstractions;
 using ConquiánServidor.Utilities;
 using NLog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.BusinessLogic.UserProfile
 {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
+﻿
 namespace ConquiánServidor.ConquiánDB.Abstractions
 {
     public interface IPlayerRepository

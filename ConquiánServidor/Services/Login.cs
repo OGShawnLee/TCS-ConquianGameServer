@@ -1,15 +1,9 @@
 ﻿using Autofac;
-using ConquiánServidor.BusinessLogic.Exceptions;
 using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Utilities.ExceptionHandler;
 using NLog;
-using System;
-using System.Data.Entity.Core;
-using System.Data.SqlClient;
-using System.ServiceModel;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.Services
 {

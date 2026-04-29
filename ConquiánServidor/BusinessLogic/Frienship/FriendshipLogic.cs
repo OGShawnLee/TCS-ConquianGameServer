@@ -6,9 +6,6 @@ using ConquiánServidor.Contracts.Enums;
 using System.Data.Entity.Infrastructure;
 using ConquiánServidor.ConquiánDB.Abstractions;
 using NLog;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.BusinessLogic.Frienship
 {

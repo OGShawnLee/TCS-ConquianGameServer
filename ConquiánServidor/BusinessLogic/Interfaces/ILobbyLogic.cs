@@ -1,5 +1,4 @@
 ﻿using ConquiánServidor.Contracts.DataContracts;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.BusinessLogic.Interfaces
 {

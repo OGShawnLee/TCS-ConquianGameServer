@@ -1,6 +1,5 @@
 ﻿using ConquiánServidor.ConquiánDB.Abstractions;
 using System.Data.Entity;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.ConquiánDB.Repositories
 {

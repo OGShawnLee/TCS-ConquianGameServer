@@ -1,8 +1,6 @@
 ﻿using ConquiánServidor.BusinessLogic.Exceptions;
 using ConquiánServidor.BusinessLogic.Game;
 using ConquiánServidor.Contracts.DataContracts;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ConquiánServidor.BusinessLogic.Validation
 {

@@ -1,5 +1,4 @@
 ﻿using ConquiánServidor.ConquiánDB.Abstractions;
-using System.Threading.Tasks;
 
 namespace ConquiánServidor.ConquiánDB.Repositories
 {

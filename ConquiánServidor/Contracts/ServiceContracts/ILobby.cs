@@ -1,7 +1,5 @@
 ﻿using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.FaultContracts;
-using System.ServiceModel;
-using System.Threading.Tasks;
 using CoreWCF;
 
 namespace ConquiánServidor.Contracts.ServiceContracts

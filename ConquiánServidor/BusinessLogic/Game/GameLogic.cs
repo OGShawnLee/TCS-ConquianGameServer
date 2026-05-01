@@ -115,7 +115,7 @@ namespace ConquiánServidor.BusinessLogic.Game
 
         private static int GetSecureRandomInt(int max)
         {
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 byte[] data = new byte[4];
                 rng.GetBytes(data);

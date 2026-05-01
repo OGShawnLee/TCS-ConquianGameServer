@@ -181,7 +181,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
         private static int GetSecureRandomInt(int min, int max)
         {
-            using (var rng = new RNGCryptoServiceProvider())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 byte[] data = new byte[RANDOM_BYTES_SIZE];
                 rng.GetBytes(data);

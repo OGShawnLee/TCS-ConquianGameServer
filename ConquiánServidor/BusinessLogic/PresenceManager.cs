@@ -6,7 +6,7 @@ using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.Contracts.ServiceContracts;
 using NLog;
 using System.Collections.Concurrent;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using CoreWCF;
 
 namespace ConquiánServidor.BusinessLogic

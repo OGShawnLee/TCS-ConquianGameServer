@@ -3,8 +3,8 @@ using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.ConquiánDB;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
-using System.Data.Entity.Infrastructure;
 using ConquiánServidor.ConquiánDB.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using NLog;
 
 namespace ConquiánServidor.BusinessLogic.Frienship
@@ -34,26 +34,26 @@ namespace ConquiánServidor.BusinessLogic.Frienship
             {
                 PlayerStatus status = PlayerStatus.Offline;
 
-                if (this.presenceManager.IsPlayerInGame(p.idPlayer))
+                if (this.presenceManager.IsPlayerInGame(p.IdPlayer))
                 {
                     status = PlayerStatus.InGame;
                 }
-                else if (this.presenceManager.IsPlayerInLobby(p.idPlayer))
+                else if (this.presenceManager.IsPlayerInLobby(p.IdPlayer))
                 {
                     status = PlayerStatus.InLobby;
                 }
-                else if (this.presenceManager.IsPlayerOnline(p.idPlayer))
+                else if (this.presenceManager.IsPlayerOnline(p.IdPlayer))
                 {
                     status = PlayerStatus.Online;
                 }
 
                 friendDtos.Add(new PlayerDto
                 {
-                    idPlayer = p.idPlayer,
-                    nickname = p.nickname,
-                    pathPhoto = p.pathPhoto,
+                    idPlayer = p.IdPlayer,
+                    nickname = p.Nickname,
+                    pathPhoto = p.PathPhoto,
                     Status = status,
-                    idLevel = p.idLevel
+                    idLevel = p.IdLevel
                 });
             }
 
@@ -71,8 +71,8 @@ namespace ConquiánServidor.BusinessLogic.Frienship
 
             return requests.Select(f => new FriendRequestDto
             {
-                IdFriendship = f.idFriendship,
-                Nickname = f.Player1.nickname
+                IdFriendship = f.IdFriendship,
+                Nickname = f.IdOrigenNavigation.Nickname
             }).ToList();
         }
 
@@ -80,7 +80,7 @@ namespace ConquiánServidor.BusinessLogic.Frienship
         {
             var player = await playerRepository.GetPlayerByNicknameAsync(nickname);
 
-            if (player == null || player.idPlayer == idPlayer)
+            if (player == null || player.IdPlayer == idPlayer)
             {
                 Logger.Warn($"Player search failed: Nickname not found or matches requester ID: {idPlayer}");
                 throw new BusinessLogicException(ServiceErrorType.UserNotFound);
@@ -88,31 +88,31 @@ namespace ConquiánServidor.BusinessLogic.Frienship
 
             PlayerStatus status = PlayerStatus.Offline;
 
-            if (this.presenceManager.IsPlayerInGame(player.idPlayer))
+            if (this.presenceManager.IsPlayerInGame(player.IdPlayer))
             {
                 status = PlayerStatus.InGame;
             }
-            else if (this.presenceManager.IsPlayerInLobby(player.idPlayer))
+            else if (this.presenceManager.IsPlayerInLobby(player.IdPlayer))
             {
                 status = PlayerStatus.InLobby;
             }
-            else if (this.presenceManager.IsPlayerOnline(player.idPlayer))
+            else if (this.presenceManager.IsPlayerOnline(player.IdPlayer))
             {
                 status = PlayerStatus.Online;
             }
 
-            Logger.Info($"Player search successful. Found Player ID: {player.idPlayer}");
+            Logger.Info($"Player search successful. Found Player ID: {player.IdPlayer}");
 
-            string rankName = player.LevelRules?.RankName;
+            string rankName = player.IdLevelNavigation?.RankName;
 
             return new PlayerDto
             {
-                idPlayer = player.idPlayer,
-                nickname = player.nickname,
-                pathPhoto = player.pathPhoto,
-                idLevel = player.idLevel,
+                idPlayer = player.IdPlayer,
+                nickname = player.Nickname,
+                pathPhoto = player.PathPhoto,
+                idLevel = player.IdLevel,
                 RankName = rankName,
-                Status = status 
+                Status = status
             };
         }
 
@@ -124,10 +124,10 @@ namespace ConquiánServidor.BusinessLogic.Frienship
 
             if (existingFriendship != null)
             {
-                if (existingFriendship.idStatus == (int)FriendshipStatus.Pending && existingFriendship.idOrigen == idFriend)
+                if (existingFriendship.IdStatus == (int)FriendshipStatus.Pending && existingFriendship.IdOrigen == idFriend)
                 {
-                    await UpdateFriendRequestStatusAsync(existingFriendship.idFriendship, (int)FriendshipStatus.Accepted);
-                    return; 
+                    await UpdateFriendRequestStatusAsync(existingFriendship.IdFriendship, (int)FriendshipStatus.Accepted);
+                    return;
                 }
                 Logger.Warn($"Friend request failed: Relationship already exists between Player ID {idPlayer} and Target ID {idFriend}");
                 throw new BusinessLogicException(ServiceErrorType.ExistingRequest);
@@ -135,9 +135,9 @@ namespace ConquiánServidor.BusinessLogic.Frienship
 
             var newRequest = new Friendship
             {
-                idOrigen = idPlayer,
-                idDestino = idFriend,
-                idStatus = (int)FriendshipStatus.Pending
+                IdOrigen = idPlayer,
+                IdDestino = idFriend,
+                IdStatus = (int)FriendshipStatus.Pending
             };
 
             try
@@ -165,8 +165,8 @@ namespace ConquiánServidor.BusinessLogic.Frienship
                 return;
             }
 
-            int senderId = request.idOrigen ?? 0;
-            int receiverId = request.idDestino ?? 0;
+            int senderId = request.IdOrigen ?? 0;
+            int receiverId = request.IdDestino ?? 0;
 
             if (newStatus == (int)FriendshipStatus.Accepted)
             {
@@ -178,12 +178,12 @@ namespace ConquiánServidor.BusinessLogic.Frienship
                 }
                 else
                 {
-                    request.idStatus = (int)FriendshipStatus.Accepted;
+                    request.IdStatus = (int)FriendshipStatus.Accepted;
 
                     var mutualRequest = await friendshipRepository.GetPendingRequestAsync(receiverId, senderId);
                     if (mutualRequest != null)
                     {
-                        Logger.Info($"Found mutual pending request ID {mutualRequest.idFriendship}. Removing it to prevent duplicates.");
+                        Logger.Info($"Found mutual pending request ID {mutualRequest.IdFriendship}. Removing it to prevent duplicates.");
                         friendshipRepository.RemoveFriendship(mutualRequest);
                     }
                 }

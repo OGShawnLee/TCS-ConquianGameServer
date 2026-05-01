@@ -20,7 +20,6 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="Autofac" Version="9.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.0" />
     <PackageReference Include="NLog" Version="6.0.6" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.0" />
@@ -31,56 +30,11 @@
     <PackageReference Include="CoreWCF.Http" Version="1.8.0" />
     <PackageReference Include="CoreWCF.WebHttp" Version="1.8.0" />
     <PackageReference Include="CoreWCF.NetTcp" Version="1.8.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="ConquiánDB\ConquiánModelDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConquiánModelDB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\ConquiánModelDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\ConquiánModelDB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ConquiánModelDB.edmx</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Friendship.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Game.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Gamemode.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\GamePlayer.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\LevelRules.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Lobby.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Player.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Social.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\SocialType.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\Status.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConquiánDB\StatusLobby.cs">
-      <DependentUpon>ConquiánModelDB.tt</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Langs\Lang1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -93,38 +47,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="ConquiánDB\ConquiánModelDB.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ConquiánModelDB.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Update="ConquiánDB\ConquiánModelDB.edmx.diagram">
-      <DependentUpon>ConquiánModelDB.edmx</DependentUpon>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConquiánDB\ConquiánModelDB.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ConquiánModelDB.edmx</DependentUpon>
-      <LastGenOutput>ConquiánModelDB.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="ConquiánDB\ConquiánModelDB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ConquiánModelDB.edmx</DependentUpon>
-      <LastGenOutput>ConquiánModelDB.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Langs\Lang.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

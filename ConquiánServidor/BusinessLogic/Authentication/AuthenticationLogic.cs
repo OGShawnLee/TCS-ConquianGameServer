@@ -37,26 +37,26 @@ namespace ConquiánServidor.BusinessLogic.Authentication
 
             var playerFromDb = await playerRepository.GetPlayerByEmailAsync(playerEmail);
 
-            if (playerFromDb == null || !PasswordHasher.verifyPassword(playerPassword, playerFromDb.password))
+            if (playerFromDb == null || !PasswordHasher.verifyPassword(playerPassword, playerFromDb.Password))
             {
                 throw new BusinessLogicException(ServiceErrorType.InvalidPassword);
             }
 
-            if (this.presenceManager.IsPlayerOnline(playerFromDb.idPlayer))
+            if (this.presenceManager.IsPlayerOnline(playerFromDb.IdPlayer))
             {
-                Logger.Warn($"Authentication failed: Player ID {playerFromDb.idPlayer} is already online.");
+                Logger.Warn($"Authentication failed: Player ID {playerFromDb.IdPlayer} is already online.");
                 throw new BusinessLogicException(ServiceErrorType.SessionActive);
             }
 
-            await this.presenceManager.NotifyStatusChange(playerFromDb.idPlayer, (int)PlayerStatus.Online);
+            await this.presenceManager.NotifyStatusChange(playerFromDb.IdPlayer, (int)PlayerStatus.Online);
 
-            Logger.Info($"Authentication successful for Player ID: {playerFromDb.idPlayer}");
+            Logger.Info($"Authentication successful for Player ID: {playerFromDb.IdPlayer}");
 
             return new PlayerDto
             {
-                idPlayer = playerFromDb.idPlayer,
-                nickname = playerFromDb.nickname,
-                pathPhoto = playerFromDb.pathPhoto,
+                idPlayer = playerFromDb.IdPlayer,
+                nickname = playerFromDb.Nickname,
+                pathPhoto = playerFromDb.PathPhoto,
                 Status = PlayerStatus.Online
             };
         }
@@ -94,36 +94,36 @@ namespace ConquiánServidor.BusinessLogic.Authentication
                 throw new BusinessLogicException(ServiceErrorType.UserNotFound);
             }
 
-            playerToUpdate.password = PasswordHasher.hashPassword(finalPlayerData.password);
-            playerToUpdate.nickname = finalPlayerData.nickname;
-            playerToUpdate.name = finalPlayerData.name;
-            playerToUpdate.lastName = finalPlayerData.lastName;
-            playerToUpdate.pathPhoto = finalPlayerData.pathPhoto;
-            playerToUpdate.verificationCode = null;
-            playerToUpdate.codeExpiryDate = null;
-            playerToUpdate.idLevel = INITIAL_PLAYER_LEVEL;
-            playerToUpdate.currentPoints = INITIAL_PLAYER_POINTS;
+            playerToUpdate.Password = PasswordHasher.hashPassword(finalPlayerData.password);
+            playerToUpdate.Nickname = finalPlayerData.nickname;
+            playerToUpdate.Name = finalPlayerData.name;
+            playerToUpdate.LastName = finalPlayerData.lastName;
+            playerToUpdate.PathPhoto = finalPlayerData.pathPhoto;
+            playerToUpdate.VerificationCode = null;
+            playerToUpdate.CodeExpiryDate = null;
+            playerToUpdate.IdLevel = INITIAL_PLAYER_LEVEL;
+            playerToUpdate.CurrentPoints = INITIAL_PLAYER_POINTS;
 
             await playerRepository.SaveChangesAsync();
 
-            Logger.Info($"Registration successful for Player ID: {playerToUpdate.idPlayer}");
+            Logger.Info($"Registration successful for Player ID: {playerToUpdate.IdPlayer}");
         }
 
         public async Task<string> GenerateAndStoreRecoveryTokenAsync(string email)
         {
             var player = await playerRepository.GetPlayerByEmailAsync(email);
 
-            if (player == null || string.IsNullOrEmpty(player.password))
+            if (player == null || string.IsNullOrEmpty(player.Password))
             {
                 throw new BusinessLogicException(ServiceErrorType.UserNotFound);
             }
 
             string recoveryCode = emailService.GenerateVerificationCode();
-            player.verificationCode = recoveryCode;
-            player.codeExpiryDate = DateTime.UtcNow.AddMinutes(VERIFICATION_CODE_EXPIRY_MINUTES);
+            player.VerificationCode = recoveryCode;
+            player.CodeExpiryDate = DateTime.UtcNow.AddMinutes(VERIFICATION_CODE_EXPIRY_MINUTES);
             await playerRepository.SaveChangesAsync();
 
-            Logger.Info($"Recovery token generated for Player ID: {player.idPlayer}");
+            Logger.Info($"Recovery token generated for Player ID: {player.IdPlayer}");
             return recoveryCode;
         }
 
@@ -147,19 +147,19 @@ namespace ConquiánServidor.BusinessLogic.Authentication
             if (playerToVerify == null)
             {
                 playerToVerify = new Player();
-                playerToVerify.idLevel = INITIAL_PLAYER_LEVEL;
+                playerToVerify.IdLevel = INITIAL_PLAYER_LEVEL;
                 playerRepository.AddPlayer(playerToVerify);
             }
 
-            playerToVerify.email = email;
-            playerToVerify.verificationCode = verificationCode;
-            playerToVerify.codeExpiryDate = DateTime.UtcNow.AddMinutes(VERIFICATION_CODE_EXPIRY_MINUTES);
+            playerToVerify.Email = email;
+            playerToVerify.VerificationCode = verificationCode;
+            playerToVerify.CodeExpiryDate = DateTime.UtcNow.AddMinutes(VERIFICATION_CODE_EXPIRY_MINUTES);
             await playerRepository.SaveChangesAsync();
 
             var emailTemplate = new VerificationEmailTemplate(verificationCode);
             await emailService.SendEmailAsync(email, emailTemplate);
 
-            Logger.Info($"Verification code sent. Player ID (if available): {playerToVerify.idPlayer}");
+            Logger.Info($"Verification code sent. Player ID (if available): {playerToVerify.IdPlayer}");
             return verificationCode;
         }
 
@@ -172,18 +172,18 @@ namespace ConquiánServidor.BusinessLogic.Authentication
                 throw new BusinessLogicException(ServiceErrorType.UserNotFound);
             }
 
-            if (player.codeExpiryDate.HasValue && DateTime.UtcNow > player.codeExpiryDate.Value)
+            if (player.CodeExpiryDate.HasValue && DateTime.UtcNow > player.CodeExpiryDate.Value)
             {
-                Logger.Warn($"Verification code expired for Player ID {player.idPlayer}");
+                Logger.Warn($"Verification code expired for Player ID {player.IdPlayer}");
                 throw new BusinessLogicException(ServiceErrorType.VerificationCodeExpired);
             }
 
-            if (player.verificationCode != code)
+            if (player.VerificationCode != code)
             {
                 throw new BusinessLogicException(ServiceErrorType.InvalidVerificationCode);
             }
 
-            Logger.Info($"Verification code verified for Player ID: {player.idPlayer}");
+            Logger.Info($"Verification code verified for Player ID: {player.IdPlayer}");
         }
 
         public async Task HandlePasswordRecoveryRequestAsync(string email)
@@ -216,23 +216,23 @@ namespace ConquiánServidor.BusinessLogic.Authentication
                 throw new BusinessLogicException(ServiceErrorType.UserNotFound);
             }
 
-            player.password = PasswordHasher.hashPassword(newPassword);
-            player.verificationCode = null;
-            player.codeExpiryDate = null;
+            player.Password = PasswordHasher.hashPassword(newPassword);
+            player.VerificationCode = null;
+            player.CodeExpiryDate = null;
 
             await playerRepository.SaveChangesAsync();
 
-            Logger.Info($"Password reset successful for Player ID: {player.idPlayer}");
+            Logger.Info($"Password reset successful for Player ID: {player.IdPlayer}");
         }
 
         public async Task DeleteTemporaryPlayerAsync(string email)
         {
             var player = await playerRepository.GetPlayerByEmailAsync(email);
 
-            if (player != null && string.IsNullOrEmpty(player.name))
+            if (player != null && string.IsNullOrEmpty(player.Name))
             {
                 await playerRepository.DeletePlayerAsync(player);
-                Logger.Info($"Temporary player deleted. Player ID: {player.idPlayer}");
+                Logger.Info($"Temporary player deleted. Player ID: {player.IdPlayer}");
             }
             else
             {

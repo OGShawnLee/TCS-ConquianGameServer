@@ -49,7 +49,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
             int nextLevelTarget = await GetNextLevelTargetPoints(dbPlayer);
             string rankName = GetPlayerRankName(dbPlayer);
-            PlayerStatus playerStatus = GetPlayerStatus(dbPlayer.idPlayer);
+            PlayerStatus playerStatus = GetPlayerStatus(dbPlayer.IdPlayer);
 
             Logger.Info($"Profile retrieved successfully for Player ID: {idPlayer}");
 
@@ -69,12 +69,12 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
         private async Task<int> GetNextLevelTargetPoints(ConquiánDB.Player player)
         {
-            int nextLevelTarget = await playerRepository.GetNextLevelThresholdAsync(player.idLevel);
+            int nextLevelTarget = await playerRepository.GetNextLevelThresholdAsync(player.IdLevel);
             bool levelNotFound = (nextLevelTarget == LEVEL_NOT_FOUND);
 
             if (levelNotFound)
             {
-                nextLevelTarget = player.currentPoints;
+                nextLevelTarget = player.CurrentPoints;
             }
 
             return nextLevelTarget;
@@ -82,7 +82,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
         private string GetPlayerRankName(ConquiánDB.Player player)
         {
-            string rankName = player.LevelRules?.RankName ?? DEFAULT_RANK_NAME;
+            string rankName = player.IdLevelNavigation?.RankName ?? DEFAULT_RANK_NAME;
             return rankName;
         }
 
@@ -101,14 +101,14 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
         {
             var playerDto = new PlayerDto
             {
-                idPlayer = player.idPlayer,
-                name = player.name,
-                lastName = player.lastName,
-                nickname = player.nickname,
-                email = player.email,
-                idLevel = player.idLevel,
-                pathPhoto = player.pathPhoto,
-                currentPoints = player.currentPoints,
+                idPlayer = player.IdPlayer,
+                name = player.Name,
+                lastName = player.LastName,
+                nickname = player.Nickname,
+                email = player.Email,
+                idLevel = player.IdLevel,
+                pathPhoto = player.PathPhoto,
+                currentPoints = player.CurrentPoints,
                 PointsToNextLevel = nextLevelTarget,
                 RankName = rankName,
                 Status = status
@@ -147,9 +147,9 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
         {
             var socialDtos = dbSocials.Select(dbSocial => new SocialDto
             {
-                IdSocial = dbSocial.idSocial,
-                IdSocialType = (int)dbSocial.idSocialType,
-                UserLink = dbSocial.userLink
+                IdSocial = dbSocial.IdSocial,
+                IdSocialType = (int)dbSocial.IdSocialType,
+                UserLink = dbSocial.UserLink
             }).ToList();
 
             return socialDtos;
@@ -195,10 +195,10 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
         private void UpdatePlayerBasicInfo(ConquiánDB.Player playerToUpdate, PlayerDto playerDto)
         {
-            playerToUpdate.name = playerDto.name;
-            playerToUpdate.lastName = playerDto.lastName;
-            playerToUpdate.nickname = playerDto.nickname;
-            playerToUpdate.pathPhoto = playerDto.pathPhoto;
+            playerToUpdate.Name = playerDto.name;
+            playerToUpdate.LastName = playerDto.lastName;
+            playerToUpdate.Nickname = playerDto.nickname;
+            playerToUpdate.PathPhoto = playerDto.pathPhoto;
         }
 
         private void UpdatePasswordIfProvided(ConquiánDB.Player playerToUpdate, PlayerDto playerDto)
@@ -209,7 +209,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
             {
                 Logger.Info($"Password update included for Player ID: {playerDto.idPlayer}");
                 string hashedPassword = PasswordHasher.hashPassword(playerDto.password);
-                playerToUpdate.password = hashedPassword;
+                playerToUpdate.Password = hashedPassword;
             }
         }
 
@@ -269,9 +269,9 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
         {
             var social = new ConquiánDB.Social
             {
-                idPlayer = idPlayer,
-                idSocialType = socialDto.IdSocialType,
-                userLink = socialDto.UserLink
+                IdPlayer = idPlayer,
+                IdSocialType = socialDto.IdSocialType,
+                UserLink = socialDto.UserLink
             };
 
             return social;
@@ -284,7 +284,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
             var playerToUpdate = await playerRepository.GetPlayerByIdAsync(idPlayer);
             ValidatePlayerExistsForPictureUpdate(playerToUpdate, idPlayer);
 
-            playerToUpdate.pathPhoto = newPath;
+            playerToUpdate.PathPhoto = newPath;
             await playerRepository.SaveChangesAsync();
 
             Logger.Info($"Profile picture updated successfully for Player ID: {idPlayer}");
@@ -334,7 +334,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
             int myScore = GetPlayerScore(myStats);
 
             var gameResult = DetermineGameResult(myStats, rivalStats, myScore);
-            string formattedTime = FormatGameTime(game.gameTime);
+            string formattedTime = FormatGameTime(game.GameTime);
             string gameMode = GetGameModeName(game);
 
             var historyDto = new GameHistoryDto
@@ -352,31 +352,31 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
         private ConquiánDB.GamePlayer FindPlayerStats(ConquiánDB.Game game, int idPlayer)
         {
-            var playerStats = game.GamePlayer.FirstOrDefault(gp => gp.idPlayer == idPlayer);
+            var playerStats = game.GamePlayers.FirstOrDefault(gp => gp.IdPlayer == idPlayer);
             return playerStats;
         }
 
         private ConquiánDB.GamePlayer FindRivalStats(ConquiánDB.Game game, int idPlayer)
         {
-            var rivalStats = game.GamePlayer.FirstOrDefault(gp => gp.idPlayer != idPlayer);
+            var rivalStats = game.GamePlayers.FirstOrDefault(gp => gp.IdPlayer != idPlayer);
             return rivalStats;
         }
 
         private string GetOpponentName(ConquiánDB.GamePlayer rivalStats)
         {
-            string opponentName = rivalStats?.Player?.nickname ?? DEFAULT_OPPONENT_NAME;
+            string opponentName = rivalStats?.IdPlayerNavigation?.Nickname ?? DEFAULT_OPPONENT_NAME;
             return opponentName;
         }
 
         private string GetPlayerName(ConquiánDB.GamePlayer myStats)
         {
-            string playerName = myStats?.Player?.nickname ?? DEFAULT_PLAYER_NAME;
+            string playerName = myStats?.IdPlayerNavigation?.Nickname ?? DEFAULT_PLAYER_NAME;
             return playerName;
         }
 
         private int GetPlayerScore(ConquiánDB.GamePlayer myStats)
         {
-            int score = myStats?.score ?? DEFAULT_SCORE;
+            int score = myStats?.Score?? DEFAULT_SCORE;
             return score;
         }
 
@@ -398,8 +398,8 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
                 return result;
             }
 
-            bool iWon = myStats.isWinner;
-            bool rivalWon = (rivalStats != null && rivalStats.isWinner);
+            bool iWon = myStats.IsWinner;
+            bool rivalWon = (rivalStats != null && rivalStats.IsWinner);
 
             if (iWon)
             {
@@ -432,7 +432,7 @@ namespace ConquiánServidor.BusinessLogic.UserProfile
 
         private string GetGameModeName(ConquiánDB.Game game)
         {
-            string gameModeName = game.Gamemode?.gamemode1 ?? DEFAULT_GAME_MODE;
+            string gameModeName = game.IdGamemodeNavigation?.Gamemode1 ?? DEFAULT_GAME_MODE;
             return gameModeName;
         }
 

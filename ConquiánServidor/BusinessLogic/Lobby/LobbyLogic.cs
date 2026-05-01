@@ -61,11 +61,11 @@ namespace ConquiánServidor.BusinessLogic.Lobby
 
             return new LobbyDto
             {
-                RoomCode = lobby.roomCode,
-                idHostPlayer = lobby.idHostPlayer,
-                StatusLobby = lobby.StatusLobby.statusName,
+                RoomCode = lobby.RoomCode,
+                idHostPlayer = lobby.IdHostPlayer,
+                StatusLobby = lobby.IdStatusLobbyNavigation.StatusName,
                 idGamemode = session.IdGamemode,
-                GameMode = lobby.Gamemode?.gamemode1,
+                GameMode = lobby.IdGamemodeNavigation?.Gamemode1,
                 Players = session.Players.ToList(),
                 ChatMessages = new List<MessageDto>()
             };
@@ -91,11 +91,11 @@ namespace ConquiánServidor.BusinessLogic.Lobby
 
             var newLobby = new ConquiánDB.Lobby()
             {
-                roomCode = newRoomCode,
-                idHostPlayer = idHostPlayer,
-                idStatusLobby = (int)LobbyStatus.Waiting,
-                creationDate = DateTime.UtcNow,
-                idGamemode = null
+                RoomCode = newRoomCode,
+                IdHostPlayer = idHostPlayer,
+                IdStatusLobby = (int)LobbyStatus.Waiting,
+                CreationDate = DateTime.UtcNow,
+                IdGamemode = null
             };
 
             lobbyRepository.AddLobby(newLobby);
@@ -103,9 +103,9 @@ namespace ConquiánServidor.BusinessLogic.Lobby
 
             var hostPlayerDto = new PlayerDto
             {
-                idPlayer = hostPlayerEntity.idPlayer,
-                nickname = hostPlayerEntity.nickname,
-                pathPhoto = hostPlayerEntity.pathPhoto,
+                idPlayer = hostPlayerEntity.IdPlayer,
+                nickname = hostPlayerEntity.Nickname,
+                pathPhoto = hostPlayerEntity.PathPhoto,
                 Status = PlayerStatus.Online
             };
 
@@ -127,9 +127,9 @@ namespace ConquiánServidor.BusinessLogic.Lobby
                 throw new BusinessLogicException(ServiceErrorType.LobbyNotFound);
             }
 
-            if (lobby.idStatusLobby != (int)LobbyStatus.Waiting)
+            if (lobby.IdStatusLobby != (int)LobbyStatus.Waiting)
             {
-                Logger.Warn($"Join lobby failed: Room Code {roomCode} is full or in-game (Status: {lobby.idStatusLobby}).");
+                Logger.Warn($"Join lobby failed: Room Code {roomCode} is full or in-game (Status: {lobby.IdStatusLobbyNavigation.StatusName}).");
                 throw new BusinessLogicException(ServiceErrorType.LobbyFull);
             }
 
@@ -142,9 +142,9 @@ namespace ConquiánServidor.BusinessLogic.Lobby
 
             var playerDto = new PlayerDto
             {
-                idPlayer = playerToJoinEntity.idPlayer,
-                nickname = playerToJoinEntity.nickname,
-                pathPhoto = playerToJoinEntity.pathPhoto,
+                idPlayer = playerToJoinEntity.IdPlayer,
+                nickname = playerToJoinEntity.Nickname,
+                pathPhoto = playerToJoinEntity.PathPhoto,
                 Status = PlayerStatus.Online
             };
 
@@ -206,7 +206,7 @@ namespace ConquiánServidor.BusinessLogic.Lobby
                 throw new BusinessLogicException(ServiceErrorType.LobbyNotFound);
             }
 
-            if (lobby.idStatusLobby != (int)LobbyStatus.Waiting)
+            if (lobby.IdStatusLobby != (int)LobbyStatus.Waiting)
             {
                 Logger.Warn($"Guest join failed: Room Code {roomCode} is full or in-game.");
                 throw new BusinessLogicException(ServiceErrorType.LobbyFull);
@@ -233,14 +233,14 @@ namespace ConquiánServidor.BusinessLogic.Lobby
                 return false;
             }
 
-            bool wasHost = lobby.idHostPlayer == idPlayer;
+            bool wasHost = lobby.IdHostPlayer == idPlayer;
             sessionManager.RemovePlayerFromLobby(roomCode, idPlayer);
 
             Logger.Info($"Player left lobby. Room Code: {roomCode}, Player ID: {idPlayer}");
 
             if (wasHost)
             {
-                lobby.idStatusLobby = (int)LobbyStatus.Finished;
+                lobby.IdStatusLobby = (int)LobbyStatus.Finished;
                 await lobbyRepository.SaveChangesAsync();
                 sessionManager.RemoveLobby(roomCode);
                 Logger.Info($"Lobby closed: Host left. Room Code: {roomCode}");
@@ -263,7 +263,7 @@ namespace ConquiánServidor.BusinessLogic.Lobby
             var lobby = await lobbyRepository.GetLobbyByRoomCodeAsync(roomCode);
             if (lobby != null)
             {
-                lobby.idGamemode = idGamemode;
+                lobby.IdGamemode = idGamemode;
                 await lobbyRepository.SaveChangesAsync();
                 sessionManager.SetGamemode(roomCode, idGamemode);
                 Logger.Info($"Gamemode changed successfully. Room Code: {roomCode}, Gamemode ID: {idGamemode}");
@@ -312,7 +312,7 @@ namespace ConquiánServidor.BusinessLogic.Lobby
             var lobby = await lobbyRepository.GetLobbyByRoomCodeAsync(roomCode);
             if (lobby != null)
             {
-                lobby.idStatusLobby = (int)LobbyStatus.InGame;
+                lobby.IdStatusLobby = (int)LobbyStatus.InGame;
                 await lobbyRepository.SaveChangesAsync();
             }
         }
@@ -327,7 +327,7 @@ namespace ConquiánServidor.BusinessLogic.Lobby
                 throw new BusinessLogicException(ServiceErrorType.LobbyNotFound);
             }
 
-            if (lobby.idHostPlayer != idRequestingPlayer)
+            if (lobby.IdHostPlayer != idRequestingPlayer)
             {
                 Logger.Warn($"Kick failed: Player {idRequestingPlayer} is not the host of room {roomCode}.");
                 throw new BusinessLogicException(ServiceErrorType.NotLobbyHost);

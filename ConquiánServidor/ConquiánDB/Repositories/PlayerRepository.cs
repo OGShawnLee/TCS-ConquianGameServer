@@ -1,6 +1,6 @@
-﻿using ConquiánServidor.ConquiánDB.Abstractions;
-using System.Data.Entity;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using ConquiánServidor.ConquiánDB.Abstractions;
 
 namespace ConquiánServidor.ConquiánDB.Repositories
 {
@@ -12,56 +12,51 @@ namespace ConquiánServidor.ConquiánDB.Repositories
         private const int RNG_UPPER_BOUND_ADJUSTMENT = 1;
         private const int RANDOM_BYTES_SIZE = 4;
 
-        private readonly ConquiánDBEntities context;
+        private readonly ConquiánContext context;
 
-        public PlayerRepository(ConquiánDBEntities context)
+        public PlayerRepository(ConquiánContext context)
         {
             this.context = context;
         }
 
         public void AddPlayer(Player player)
         {
-            context.Player.Add(player);
+            context.Players.Add(player);
         }
 
         public async Task<bool> DoesNicknameExistAsync(string nickname)
         {
-            bool nicknameExists = await context.Player.AnyAsync(p => p.nickname == nickname);
+            bool nicknameExists = await context.Players.AnyAsync(p => p.Nickname == nickname);
             return nicknameExists;
         }
 
         public async Task<Player> GetPlayerByEmailAsync(string email)
         {
-            var player = await context.Player.FirstOrDefaultAsync(p => p.email == email);
+            var player = await context.Players.FirstOrDefaultAsync(p => p.Email == email);
             return player;
         }
 
         public async Task<Player> GetPlayerByIdAsync(int idPlayer)
         {
-            context.Configuration.LazyLoadingEnabled = false;
-
-            var player = await context.Player
-                .Include(p => p.LevelRules)
-                .FirstOrDefaultAsync(p => p.idPlayer == idPlayer);
+            var player = await context.Players
+                .Include(p => p.IdLevelNavigation)
+                .FirstOrDefaultAsync(p => p.IdPlayer == idPlayer);
 
             return player;
         }
 
         public async Task<Player> GetPlayerByNicknameAsync(string nickname)
         {
-            context.Configuration.LazyLoadingEnabled = false;
-
-            var player = await context.Player
-                .Include(p => p.LevelRules)
-                .FirstOrDefaultAsync(p => p.nickname == nickname);
-
+            var player = await context.Players
+                .Include(p => p.IdLevelNavigation)
+                .FirstOrDefaultAsync(p => p.Nickname == nickname);
             return player;
         }
 
         public async Task<Player> GetPlayerForVerificationAsync(string email)
         {
-            var player = await context.Player
-                .FirstOrDefaultAsync(p => p.email == email && p.password != null);
+            var player = await context.Players
+                .FirstOrDefaultAsync(p => p.Email == email && p.Password != null);
 
             return player;
         }
@@ -82,7 +77,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
                 return DELETION_FAILED;
             }
 
-            context.Player.Remove(playerToDelete);
+            context.Players.Remove(playerToDelete);
             int changesSaved = await context.SaveChangesAsync();
 
             bool deletionSucceeded = (changesSaved > NO_CHANGES_SAVED);
@@ -109,9 +104,9 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
         private async Task<Player> GetPlayerWithLevelRulesAsync(int playerId)
         {
-            var player = await context.Player
-                .Include(p => p.LevelRules)
-                .FirstOrDefaultAsync(p => p.idPlayer == playerId);
+            var player = await context.Players
+                .Include(p => p.IdLevelNavigation)
+                .FirstOrDefaultAsync(p => p.IdPlayer == playerId);
 
             return player;
         }
@@ -119,7 +114,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
         private bool ValidatePlayerAndLevelRules(Player player)
         {
             bool playerExists = (player != null);
-            bool hasLevelRules = (player?.LevelRules != null);
+            bool hasLevelRules = (player?.IdLevelNavigation != null);
 
             bool isValid = (playerExists && hasLevelRules);
             return isValid;
@@ -127,8 +122,8 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
         private int CalculateRandomRewardPoints(Player player)
         {
-            int minReward = player.LevelRules.MinPointsReward;
-            int maxReward = player.LevelRules.MaxPointsReward;
+            int minReward = player.IdLevelNavigation.MinPointsReward;
+            int maxReward = player.IdLevelNavigation.MaxPointsReward;
             int upperBound = maxReward + RNG_UPPER_BOUND_ADJUSTMENT;
 
             int randomPoints = GetSecureRandomInt(minReward, upperBound);
@@ -137,7 +132,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
         private void AddPointsToPlayer(Player player, int points)
         {
-            player.currentPoints += points;
+            player.CurrentPoints += points;
         }
 
         private async Task UpdatePlayerLevelIfEligibleAsync(Player player)
@@ -146,7 +141,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
             while (shouldContinueChecking)
             {
-                int nextLevelNumber = player.idLevel + LEVEL_INCREMENT;
+                int nextLevelNumber = player.IdLevel + LEVEL_INCREMENT;
                 var nextLevelRule = await GetLevelRuleByLevelNumberAsync(nextLevelNumber);
 
                 bool cannotLevelUp = ShouldStopLevelUpCheck(nextLevelRule, player);
@@ -162,7 +157,7 @@ namespace ConquiánServidor.ConquiánDB.Repositories
             }
         }
 
-        private async Task<LevelRules> GetLevelRuleByLevelNumberAsync(int levelNumber)
+        private async Task<LevelRule> GetLevelRuleByLevelNumberAsync(int levelNumber)
         {
             var levelRule = await context.LevelRules
                 .FirstOrDefaultAsync(lr => lr.LevelNumber == levelNumber);
@@ -170,19 +165,18 @@ namespace ConquiánServidor.ConquiánDB.Repositories
             return levelRule;
         }
 
-        private bool ShouldStopLevelUpCheck(LevelRules nextLevelRule, Player player)
+        private bool ShouldStopLevelUpCheck(LevelRule nextLevelRule, Player player)
         {
             bool nextLevelDoesNotExist = (nextLevelRule == null);
-            bool playerLacksRequiredPoints = (player.currentPoints < nextLevelRule?.PointsRequired);
-
+            bool playerLacksRequiredPoints = (player.CurrentPoints < nextLevelRule?.PointsRequired);
             bool shouldStop = (nextLevelDoesNotExist || playerLacksRequiredPoints);
             return shouldStop;
         }
 
-        private void PromotePlayerToNextLevel(Player player, LevelRules nextLevelRule)
+        private void PromotePlayerToNextLevel(Player player, LevelRule nextLevelRule)
         {
-            player.idLevel = nextLevelRule.LevelNumber;
-            player.LevelRules = nextLevelRule;
+            player.IdLevel = nextLevelRule.LevelNumber;
+            player.IdLevelNavigation = nextLevelRule;
         }
 
         private static int GetSecureRandomInt(int min, int max)
@@ -214,12 +208,12 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 
         public async Task<List<Game>> GetPlayerGamesAsync(int idPlayer)
         {
-            var playerGames = await context.Game
+            var playerGames = await context.Games
                 .Include("Gamemode")
                 .Include("GamePlayer")
                 .Include("GamePlayer.Player")
-                .Where(g => g.GamePlayer.Any(gp => gp.idPlayer == idPlayer))
-                .OrderByDescending(g => g.idGame)
+                .Where(g => g.GamePlayers.Any(gp => gp.IdPlayer == idPlayer))
+                .OrderByDescending(g => g.IdGame)
                 .ToListAsync();
 
             return playerGames;

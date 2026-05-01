@@ -7,7 +7,7 @@ using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Properties.Langs;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using CoreWCF;
 
 namespace ConquiánServidor.Services
@@ -304,10 +304,10 @@ namespace ConquiánServidor.Services
                 var gameRepo = scope.Resolve<IGameRepository>();
                 var dbGame = new ConquiánServidor.ConquiánDB.Game
                 {
-                    gameTime = result.DurationSeconds,
-                    datePlayed = DateTime.Now,
-                    idGamemode = result.GamemodeId,
-                    GamePlayer = new List<ConquiánServidor.ConquiánDB.GamePlayer>()
+                    GameTime = result.DurationSeconds,
+                    DatePlayed = DateTime.Now,
+                    IdGamemode = result.GamemodeId,
+                    GamePlayers = new List<ConquiánServidor.ConquiánDB.GamePlayer>()
                 };
 
                 var player1Data = new GamePlayerData
@@ -403,11 +403,11 @@ namespace ConquiánServidor.Services
                 return;
             }
 
-            game.GamePlayer.Add(new ConquiánServidor.ConquiánDB.GamePlayer
+            game.GamePlayers.Add(new ConquiánServidor.ConquiánDB.GamePlayer
             {
-                idPlayer = playerData.PlayerId,
-                score = playerData.Score,
-                isWinner = playerData.IsWinner
+                IdPlayer = playerData.PlayerId,
+                Score = playerData.Score,
+                IsWinner = playerData.IsWinner
             });
 
             Logger.Debug($"Player {playerData.PlayerId} added to game record. Winner: {playerData.IsWinner}, Score: {playerData.Score}");

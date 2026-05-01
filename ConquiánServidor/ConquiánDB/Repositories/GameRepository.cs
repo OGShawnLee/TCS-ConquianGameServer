@@ -4,16 +4,16 @@ namespace ConquiánServidor.ConquiánDB.Repositories
 {
     public class GameRepository : IGameRepository
     {
-        private readonly ConquiánDBEntities context;
+        private readonly ConquiánContext context;
 
-        public GameRepository(ConquiánDBEntities context)
+        public GameRepository(ConquiánContext context)
         {
             this.context = context;
         }
 
         public async Task AddGameAsync(Game game)
         {
-            context.Game.Add(game);
+            context.Games.Add(game);
             await context.SaveChangesAsync();
         }
     }

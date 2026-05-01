@@ -1,12 +1,9 @@
-﻿using ConquiánServidor.BusinessLogic.Exceptions;
-using ConquiánServidor.Contracts.DataContracts;
+﻿using System.Net.Mail;
 using NLog;
-using System;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
-using System.Net.Mail;
-using System.ServiceModel;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using ConquiánServidor.BusinessLogic.Exceptions;
+using ConquiánServidor.Contracts.DataContracts;
 using CoreWCF;
 
 namespace ConquiánServidor.Utilities.ExceptionHandler
@@ -47,7 +44,7 @@ namespace ConquiánServidor.Utilities.ExceptionHandler
                 return HandleDbUpdateException(dbUpdateEx, operationContext);
             }
 
-            if (exception is EntityException)
+            if (exception is DbUpdateException || exception is DbUpdateConcurrencyException)
             {
                 logger.Error(exception, "Entity Framework error in {0}", operationContext);
                 return CreateFault(ServiceErrorType.DatabaseError);

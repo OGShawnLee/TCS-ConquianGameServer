@@ -6,7 +6,7 @@ using ConquiánServidor.Properties.Langs;
 using ConquiánServidor.Utilities.Email;
 using ConquiánServidor.Utilities.Email.Templates;
 using NLog;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Net.Mail;
 
 namespace ConquiánServidor.BusinessLogic.Guest

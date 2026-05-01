@@ -1,14 +1,14 @@
 ﻿using Autofac;
+using System.Collections.Concurrent;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using CoreWCF;
 using ConquiánServidor.BusinessLogic.Exceptions;
 using ConquiánServidor.BusinessLogic.Interfaces;
 using ConquiánServidor.Contracts.DataContracts;
 using ConquiánServidor.Contracts.Enums;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Utilities;
-using System.Collections.Concurrent;
-using System.Data.Entity.Core;
-using System.Data.SqlClient;
-using CoreWCF;
 
 namespace ConquiánServidor.Services
 {
@@ -104,7 +104,7 @@ namespace ConquiánServidor.Services
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
                 throw new FaultException<ServiceFaultDto>(faultData, new FaultReason(DATABASE_UNAVAILABLE_REASON));
             }
-            catch (EntityException ex)
+            catch (DbUpdateException ex)
             {
                 Logger.Error(ex, $"Entity framework error creating lobby for host {idHostPlayer}");
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
@@ -356,7 +356,7 @@ namespace ConquiánServidor.Services
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
                 throw new FaultException<ServiceFaultDto>(faultData, new FaultReason(DATABASE_UNAVAILABLE_REASON));
             }
-            catch (EntityException ex)
+            catch (DbUpdateException ex)
             {
                 Logger.Error(ex, $"Entity framework error selecting gamemode for room {roomCode}");
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
@@ -397,7 +397,7 @@ namespace ConquiánServidor.Services
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
                 throw new FaultException<ServiceFaultDto>(faultData, new FaultReason(DATABASE_UNAVAILABLE_REASON));
             }
-            catch (EntityException ex)
+            catch (DbUpdateException ex)
             {
                 Logger.Error(ex, $"Entity framework error starting game in lobby {roomCode}");
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
@@ -515,7 +515,7 @@ namespace ConquiánServidor.Services
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);
                 throw new FaultException<ServiceFaultDto>(faultData, new FaultReason(DATABASE_UNAVAILABLE_REASON));
             }
-            catch (EntityException ex)
+            catch (DbUpdateException ex)
             {
                 Logger.Error(ex, $"Entity framework error kicking player {idPlayerToKick} from room {roomCode}");
                 var faultData = new ServiceFaultDto(ServiceErrorType.DatabaseError, DATABASE_ERROR_MESSAGE);

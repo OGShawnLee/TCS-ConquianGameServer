@@ -37,8 +37,15 @@ namespace ConquiánServidor
                 Console.WriteLine();
                 Console.WriteLine("Todos los servicios están activos.");
                 Console.WriteLine("Presiona ENTER para detener el servidor...");
-                
-                app.Run();
+
+                Task serverTask = app.RunAsync();
+
+                Console.ReadLine();
+
+                Console.WriteLine("Deteniendo el servidor de forma segura...");
+                app.StopAsync().GetAwaiter().GetResult();
+
+                serverTask.GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

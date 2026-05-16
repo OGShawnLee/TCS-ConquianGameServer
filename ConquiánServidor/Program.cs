@@ -1,4 +1,4 @@
-﻿using ConquiánServidor.ConquiánDB;            // Para tu ConquiánContext
+﻿using ConquiánServidor.ConquiánDB;
 using ConquiánServidor.Contracts.ServiceContracts;
 using ConquiánServidor.Services;
 using CoreWCF;
@@ -6,9 +6,9 @@ using CoreWCF.Channels;
 using CoreWCF.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;          // Para UseSqlServer
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection; // Para GetRequiredService
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System;
 using System.Threading.Tasks;
@@ -30,24 +30,19 @@ namespace ConquiánServidor
 
                 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-                // 1. CONFIGURACIÓN DE BASE DE DATOS (EF Core)
                 var connectionString = builder.Configuration.GetConnectionString("ConquianDB");
                 builder.Services.AddDbContext<ConquiánContext>(options =>
                     options.UseSqlServer(connectionString));
 
-                // 2. REGISTRO DE CORE WCF
                 builder.Services.AddServiceModelServices();
                 builder.Services.AddServiceModelMetadata();
 
-                // 3. CONFIGURACIÓN DE PUERTOS
-                // Configuramos Kestrel para escuchar peticiones HTTP estándar en el puerto 8080
                 builder.WebHost.ConfigureKestrel(options =>
                 {
-                    options.ListenAnyIP(8080);
+                    options.ListenAnyIP(8080); // Puerto HTTP
                 });
 
-                // SOLUCIÓN AL ERROR DE UseNetTcp: Se aplica directamente sobre el WebHost
-                builder.WebHost.UseNetTcp(8081);
+                builder.WebHost.UseNetTcp(8081); // Puerto TCP
 
                 WebApplication app = RegisterServices(builder);
 
@@ -92,8 +87,6 @@ namespace ConquiánServidor
 
             try
             {
-                // SOLUCIÓN AL ERROR DE AMBIGÜEDAD:
-                // Forzamos al compilador a usar la interfaz IApplicationBuilder pasándolo a una variable explícita
                 IApplicationBuilder appBuilder = app;
 
                 appBuilder.UseServiceModel(serviceBuilder =>
@@ -101,6 +94,7 @@ namespace ConquiánServidor
                     var basicBinding = new BasicHttpBinding(BasicHttpSecurityMode.None);
                     var tcpBinding = new NetTcpBinding(SecurityMode.None);
 
+                    // --- SERVICIOS HTTP ESTÁNDAR ---
                     serviceBuilder.AddService<SignUp>();
                     serviceBuilder.AddServiceEndpoint<SignUp, ISignUp>(basicBinding, "/signUp");
 
@@ -119,25 +113,32 @@ namespace ConquiánServidor
                     serviceBuilder.AddService<GuestInvitation>();
                     serviceBuilder.AddServiceEndpoint<GuestInvitation, IGuestInvitation>(basicBinding, "/guest");
 
-                    // Servicios Duplex / TCP
-                    serviceBuilder.AddService<Invitation>();
+                    // --- SERVICIOS TCP (Duplex) ---
+                    // SOLUCIÓN: Agregamos una BaseAddress HTTP manual a cada servicio TCP para que genere el WSDL ahí.
+
+                    serviceBuilder.AddService<Invitation>(options => {
+                        options.BaseAddresses.Add(new Uri("http://localhost:8080/invitation"));
+                    });
                     serviceBuilder.AddServiceEndpoint<Invitation, IInvitationService>(tcpBinding, "/invitation");
 
-                    serviceBuilder.AddService<Presence>();
+                    serviceBuilder.AddService<Presence>(options => {
+                        options.BaseAddresses.Add(new Uri("http://localhost:8080/presence"));
+                    });
                     serviceBuilder.AddServiceEndpoint<Presence, IPresence>(tcpBinding, "/presence");
 
-                    // Solución a la ambigüedad interna de nombres (Clase vs Tabla DB)
-                    serviceBuilder.AddService<ConquiánServidor.Services.Lobby>();
+                    serviceBuilder.AddService<ConquiánServidor.Services.Lobby>(options => {
+                        options.BaseAddresses.Add(new Uri("http://localhost:8080/lobby"));
+                    });
                     serviceBuilder.AddServiceEndpoint<ConquiánServidor.Services.Lobby, ILobby>(tcpBinding, "/lobby");
 
-                    serviceBuilder.AddService<ConquiánServidor.Services.Game>();
+                    serviceBuilder.AddService<ConquiánServidor.Services.Game>(options => {
+                        options.BaseAddresses.Add(new Uri("http://localhost:8080/game"));
+                    });
                     serviceBuilder.AddServiceEndpoint<ConquiánServidor.Services.Game, IGame>(tcpBinding, "/game");
                 });
 
-                // Habilitar la exposición de metadatos WSDL
                 var serviceMetadataBehavior = app.Services.GetRequiredService<CoreWCF.Description.ServiceMetadataBehavior>();
                 serviceMetadataBehavior.HttpGetEnabled = true;
-                serviceMetadataBehavior.HttpGetUrl = new Uri("http://localhost:8080/metadata");
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"[OK] Todos los servicios registrados.");

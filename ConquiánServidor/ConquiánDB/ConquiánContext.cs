@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ConquiánServidor.ConquiánDB;
 
@@ -41,15 +43,23 @@ public partial class ConquiánContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            string envConnection = Environment.GetEnvironmentVariable("CONQUIAN_DB_CONNECTION");
+            // 1. Configuramos el lector para que busque el appsettings.json en la carpeta donde corre el servidor
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
 
-            if (string.IsNullOrEmpty(envConnection))
+            // 2. Leemos la cadena de conexión por su nombre ("ConquianDB")
+            string connectionString = configuration.GetConnectionString("ConquianDB");
+
+            if (string.IsNullOrEmpty(connectionString))
             {
-                throw new InvalidOperationException("ERROR CRÍTICO: No se encontró la variable de entorno 'CONQUIAN_DB_CONNECTION'. " +
-                    "Asegúrate de estar iniciando el proyecto con el perfil 'ConquiánServidorLS'.");
+                throw new InvalidOperationException("ERROR CRÍTICO: No se encontró la cadena de conexión 'ConquianDB' " +
+                    "dentro del archivo 'appsettings.json'. Asegúrate de que el archivo esté marcado como 'Copiar siempre' en sus propiedades.");
             }
 
-            optionsBuilder.UseSqlServer(envConnection);
+            // 3. Asignamos la cadena a SQL Server
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 
